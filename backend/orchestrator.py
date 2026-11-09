@@ -151,6 +151,7 @@ def run_investigation(content: str, mode: str = "auto", language: str | None = N
         "timeline": [s.to_dict() for s in outcome.steps],
         "agent_interpretation": outcome.interpretation,
         "planner": outcome.planner,
+        "model": getattr(gemini_model, "model_used", None),
         "degraded": degraded,
         "tool_calls": outcome.tool_calls,
         "duration_ms": int((time.monotonic() - started) * 1000),

@@ -39,7 +39,7 @@ def render() -> None:
     st.markdown(f"### {t('progress_title', lang)} · #{result.get('investigation_id') or '—'}")
     st.markdown(
         f'<span class="ss-pill">{result["input_type"]}</span><span class="ss-pill">{format_dt(result.get("created_at", ""))}</span>'
-        f'<span class="ss-pill">Planner: {result.get("planner", "")}</span><span class="ss-pill">Report: {report.get("generator", "")}</span>',
+        f'<span class="ss-pill">Planner: {result.get("planner", "")}{" · " + result["model"] if result.get("model") else ""}</span><span class="ss-pill">Report: {report.get("generator", "")}</span>',
         unsafe_allow_html=True,
     )
     st.markdown(f"**Target:** `{result.get('target', '')}`")

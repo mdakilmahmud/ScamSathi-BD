@@ -23,8 +23,9 @@ def _is_placeholder(value: str) -> bool:
 @dataclass(frozen=True)
 class Settings:
     gemini_api_key: str = field(default_factory=lambda: _env("GEMINI_API_KEY"))
-    gemini_model: str = field(default_factory=lambda: _env("GEMINI_MODEL", "gemini-3.6-flash"))
-    gemini_fallback_models: str = field(default_factory=lambda: _env("GEMINI_FALLBACK_MODELS", "gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3-flash-preview"))
+    gemini_model: str = field(default_factory=lambda: _env("GEMINI_MODEL", "gemini-3.5-flash-lite"))
+    gemini_thinking_level: str = field(default_factory=lambda: _env("GEMINI_THINKING_LEVEL", "low"))
+    gemini_fallback_models: str = field(default_factory=lambda: _env("GEMINI_FALLBACK_MODELS", "gemini-3.6-flash,gemini-3.1-flash-lite,gemini-3-flash-preview"))
     virustotal_api_key: str = field(default_factory=lambda: _env("VIRUSTOTAL_API_KEY"))
     safe_browsing_key: str = field(default_factory=lambda: _env("GOOGLE_SAFE_BROWSING_KEY"))
     urlhaus_auth_key: str = field(default_factory=lambda: _env("URLHAUS_AUTH_KEY"))

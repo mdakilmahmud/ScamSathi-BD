@@ -82,11 +82,26 @@ def settings_page() -> None:
         {"Service": "URLhaus (optional)", "Configured": settings.urlhaus_configured, "Env var": "URLHAUS_AUTH_KEY"},
     ]
     st.table([{**r, "Configured": "✅ yes" if r["Configured"] else "⚫ no"} for r in rows])
-    if st.button("Test Gemini connectivity"):
+    st.caption(f"Gemini model: `{settings.gemini_model}` (fallbacks: {settings.gemini_fallback_models}; thinking: {settings.gemini_thinking_level})")
+    c1, c2, c3 = st.columns(3)
+    if c1.button("Test Gemini"):
         from integrations.gemini import ping
 
-        ok, msg = ping()
+        with st.spinner("Contacting Gemini…"):
+            ok, msg = ping()
         (st.success if ok else st.error)(msg)
+    if c2.button("Test Safe Browsing", disabled=not settings.safe_browsing_configured):
+        from integrations.safe_browsing import check_url
+
+        with st.spinner("Querying Safe Browsing with Google's official test URL…"):
+            ev = check_url("http://testsafebrowsing.appspot.com/s/phishing.html")
+        (st.success if ev.status == "completed" else st.error)(f"{ev.status}: {ev.result}")
+    if c3.button("Test VirusTotal", disabled=not settings.virustotal_configured):
+        from integrations.virustotal import check_url
+
+        with st.spinner("Querying VirusTotal (free tier: 4 req/min)…"):
+            ev = check_url("https://www.google.com/", poll_timeout=0)
+        (st.success if ev.status == "completed" else st.error)(f"{ev.status}: {ev.result}")
 
     st.markdown("#### Privacy")
     st.write("Minimised content retention:", "enabled" if settings.retain_submitted_content else "disabled", "(set `RETAIN_SUBMITTED_CONTENT` in `.env`)")

@@ -78,6 +78,19 @@ class GeminiClient:
         self._candidates = [model] if model else settings.gemini_model_candidates
         self.model_used: str | None = None
 
+    def _thinking_config(self):
+        level = (settings.gemini_thinking_level or "").strip().lower()
+        if level in ("", "default", "auto"):
+            return None
+        return self._types.ThinkingConfig(thinking_level=level.upper())
+
+    def _with_thinking(self, config: Any, thinking: Any):
+        if thinking is None:
+            return config
+        if config is None:
+            return self._types.GenerateContentConfig(thinking_config=thinking)
+        return config.model_copy(update={"thinking_config": thinking})
+
     def _generate(self, contents: Any, config: Any):
         """Call generate_content, falling back to the next model only on availability errors."""
         errors: list[str] = []
