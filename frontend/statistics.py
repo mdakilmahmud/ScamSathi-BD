@@ -10,8 +10,8 @@ from frontend.components import LEVEL_COLORS
 
 def _bar(data: dict, colors: dict | None = None, title: str = "") -> go.Figure:
     keys = list(data)
-    fig = go.Figure(go.Bar(x=keys, y=[data[k] for k in keys], marker_color=[(colors or {}).get(k, "#3B82F6") for k in keys], text=[data[k] for k in keys], textposition="outside"))
-    fig.update_layout(title=title, height=300, margin=dict(l=10, r=10, t=40, b=10), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font={"color": "#E5E7EB"}, yaxis=dict(gridcolor="#1E2A44"))
+    fig = go.Figure(go.Bar(x=keys, y=[data[k] for k in keys], marker_color=[(colors or {}).get(k, "#00E5FF") for k in keys], text=[data[k] for k in keys], textposition="outside"))
+    fig.update_layout(title=title, height=300, margin=dict(l=10, r=10, t=40, b=10), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font={"color": "#E5E7EB"}, yaxis=dict(gridcolor="#0F3B2A"))
     return fig
 
 
@@ -33,7 +33,7 @@ def render() -> None:
         st.plotly_chart(_bar(stats["by_type"], title="Input types"), width="stretch", config={"displayModeBar": False})
     a, b = st.columns(2)
     with a:
-        st.plotly_chart(_bar(stats["by_status"], {"Complete": "#22C55E", "Partial": "#F59E0B", "Failed": "#EF4444"}, "Investigation completeness"), width="stretch", config={"displayModeBar": False})
+        st.plotly_chart(_bar(stats["by_status"], {"Complete": "#00FF9C", "Partial": "#FFB020", "Failed": "#FF3864"}, "Investigation completeness"), width="stretch", config={"displayModeBar": False})
     with b:
         st.markdown("**Source availability** (evidence rows by status)")
         import pandas as pd

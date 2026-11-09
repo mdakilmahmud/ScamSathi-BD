@@ -43,7 +43,7 @@ The app **never visits** a submitted URL. It only consults security-intelligence
     )
     st.markdown("#### Risk scoring model")
     st.table([{"Evidence group": k, "Maximum contribution": v} for k, v in WEIGHTS.items()] + [{"Evidence group": "Total", "Maximum contribution": sum(WEIGHTS.values())}])
-    st.caption("Floors: strong message indicators (weight × 9, cap 80) and brand-lookalike domain features (weight × 4, cap 45) can raise the score because an OTP request or a fake bKash domain is dangerous regardless of list reputation. Only API evidence can push a score above those caps.")
+    st.caption("Floors: strong message indicators (weight × 10, cap 80) and brand-lookalike domain features (weight × 4, cap 45) can raise the score because an OTP request or a fake bKash domain is dangerous regardless of list reputation. Only API evidence can push a score above those caps.")
     st.table([{"Score": f"{lo}–{hi - 1}", "Category": label} for lo, hi, label in RISK_LEVELS])
     st.markdown("**Risk ≠ confidence.** Risk describes how concerning the evidence is; confidence describes how complete the investigation was (which sources actually answered).")
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import streamlit as st
 
 from database import repository
-from frontend.components import build_markdown_report, contribution_chart, evidence_card, format_dt, get_lang, level_badge, result_json, risk_gauge
+from frontend.components import build_markdown_report, contribution_chart, evidence_card, format_dt, get_lang, hud, level_badge, result_json, risk_gauge, verdict_banner
 from utils.language import t
 
 
@@ -36,13 +36,15 @@ def render() -> None:
         return
 
     risk, report = result["risk"], result["report"]
-    st.markdown(f"### {t('progress_title', lang)} · #{result.get('investigation_id') or '—'}")
+    st.markdown(f'<div class="hx-hero"><div class="eyebrow">// {t("dossier", lang)} · #{result.get("investigation_id") or "—"}</div></div>', unsafe_allow_html=True)
     st.markdown(
         f'<span class="ss-pill">{result["input_type"]}</span><span class="ss-pill">{format_dt(result.get("created_at", ""))}</span>'
-        f'<span class="ss-pill">Planner: {result.get("planner", "")}{" · " + result["model"] if result.get("model") else ""}</span><span class="ss-pill">Report: {report.get("generator", "")}</span>',
+        f'<span class="ss-pill">Planner: {result.get("planner", "")}{" · " + result["model"] if result.get("model") else ""}</span><span class="ss-pill">Report: {report.get("generator", "")}</span>'
+        f'<span class="ss-pill">{result.get("tool_calls", 0)} tool calls · {result.get("duration_ms", 0)} ms</span>',
         unsafe_allow_html=True,
     )
-    st.markdown(f"**Target:** `{result.get('target', '')}`")
+    completed = len(risk.get("sources_completed", []))
+    verdict_banner(risk["level"], lang, f"{t('hud_target', lang)}: {result.get('target', '')}")
     if result.get("degraded"):
         st.info(t("degraded_notice", lang), icon="ℹ️")
 
@@ -50,12 +52,12 @@ def render() -> None:
     with g:
         st.plotly_chart(risk_gauge(risk["score"], risk["level"]), width="stretch", config={"displayModeBar": False})
     with m:
-        st.markdown(f"#### {t('overall', lang)}")
-        st.markdown(level_badge(risk["level"], lang), unsafe_allow_html=True)
-        c1, c2, c3 = st.columns(3)
-        c1.metric(t("risk_score", lang), f"{risk['score']}/100")
-        c2.metric(t("confidence", lang), t("conf_" + risk["confidence"], lang))
-        c3.metric(t("status", lang), risk["investigation_status"])
+        hud([
+            (t("risk_score", lang), f"{risk['score']}/100", {"High": "red", "Suspicious": "red", "Guarded": "", "Low": "neon"}[risk["level"]]),
+            (t("risk_level", lang), t("level_" + risk["level"], lang), ""),
+            (t("confidence", lang), t("conf_" + risk["confidence"], lang), "cyan"),
+            (t("status", lang), f"{risk['investigation_status']} · {completed} src", ""),
+        ])
         st.markdown(f"**{t('summary', lang)}:** {report.get('summary', '')}")
 
     tab1, tab2, tab3, tab4 = st.tabs([t("tab_overview", lang), t("tab_evidence", lang), t("tab_ai", lang), t("tab_investigation", lang)])

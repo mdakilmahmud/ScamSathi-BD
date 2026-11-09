@@ -1,11 +1,14 @@
 """Home page: submit a URL or message and watch the real investigation."""
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from backend.orchestrator import InvestigationError, run_investigation
 from config.settings import settings
-from frontend.components import get_lang
+from database import repository
+from frontend.components import get_lang, hud, terminal
 from frontend.investigation import ProgressView
 from utils.language import t
 
@@ -18,13 +21,37 @@ EXAMPLES = {
 }
 
 
+def _hud(lang: str) -> None:
+    try:
+        stats = repository.statistics()
+    except Exception:
+        stats = {"total": 0, "by_level": {}}
+    online = sum(1 for ok in (settings.gemini_configured, settings.safe_browsing_configured, settings.virustotal_configured, settings.urlhaus_configured) if ok)
+    threats = stats["by_level"].get("High", 0) + stats["by_level"].get("Suspicious", 0)
+    hud([
+        (t("hud_scans", lang), stats["total"], "cyan"),
+        (t("hud_threats", lang), threats, "red" if threats else ""),
+        (t("hud_sources", lang), f"{online}/4", "neon"),
+        (t("hud_ready", lang), "ARMED" if settings.gemini_configured else "RULE-BASED", "neon" if settings.gemini_configured else ""),
+    ])
+
+
 def render() -> None:
     lang = get_lang()
-    st.markdown(f'<div class="ss-hero"><h1>{t("hero", lang)}</h1><p>{t("hero_sub", lang)}</p></div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="hx-hero"><div class="eyebrow">// agentic scam investigation · bangladesh</div>'
+        f'<h1>{t("hero", lang)}<span class="hx-cursor"></span></h1><p>{t("hero_sub", lang)}</p></div>',
+        unsafe_allow_html=True,
+    )
+    _hud(lang)
 
     if not settings.gemini_configured:
         st.info(t("degraded_notice", lang), icon="ℹ️")
 
+    st.markdown(
+        terminal(f'<span class="dim">$</span> <span class="hl">scamsathi</span> --investigate <span class="dim">&lt;target&gt;</span><br><span class="dim"># {html.escape(t("term_hint", lang))}</span>', t("term_title", lang)),
+        unsafe_allow_html=True,
+    )
     with st.container(border=True):
         st.session_state.setdefault("content_input", st.session_state.get("draft_content", ""))
 
@@ -33,7 +60,7 @@ def render() -> None:
             if picked != "—":
                 st.session_state["content_input"] = EXAMPLES[picked]
 
-        st.selectbox("Try an example (optional)", ["—"] + list(EXAMPLES), key="example_pick", on_change=_apply_example)
+        st.selectbox("Load a sample target (optional)", ["—"] + list(EXAMPLES), key="example_pick", on_change=_apply_example)
         content = st.text_area("Content", placeholder=t("input_placeholder", lang), height=150, label_visibility="collapsed", key="content_input")
         col_mode, col_btn = st.columns([3, 1])
         with col_mode:
@@ -55,9 +82,9 @@ def render() -> None:
             return
 
     c1, c2, c3 = st.columns(3)
-    for col, key in zip((c1, c2, c3), ("ai", "sources", "lang")):
+    for n, (col, key) in enumerate(zip((c1, c2, c3), ("ai", "sources", "lang")), 1):
         with col:
-            st.markdown(f'<div class="ss-card"><h4>{t(f"card_{key}_title", lang)}</h4><p>{t(f"card_{key}_body", lang)}</p></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="hx-card"><div class="num">MODULE 0{n}</div><h4>{t(f"card_{key}_title", lang)}</h4><p>{t(f"card_{key}_body", lang)}</p></div>', unsafe_allow_html=True)
 
     st.markdown("")
     st.markdown(f"**{t('safety_title', lang)}**")
