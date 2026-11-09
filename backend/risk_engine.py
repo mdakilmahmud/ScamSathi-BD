@@ -25,6 +25,10 @@ MESSAGE_FLOOR_MULTIPLIER = 9
 MESSAGE_FLOOR_CAP = 80
 DOMAIN_FLOOR_MULTIPLIER = 4
 DOMAIN_FLOOR_CAP = 45
+# A URL explicitly listed as phishing/malware by a security provider is a confirmed
+# threat; its score never falls below the High threshold.
+CONFIRMED_THREAT_FLOOR = 70
+EXTERNAL_GROUPS = ("safe_browsing", "virustotal", "urlhaus")
 
 
 class Contribution(BaseModel):
@@ -153,6 +157,10 @@ def calculate_risk(evidence: list[Evidence], has_url: bool = True, llm_available
     elif domain_floor > score:
         floor_notes.append(f"Score raised to {domain_floor} by the domain-indicator floor (indicator weight {domain_weight} x {DOMAIN_FLOOR_MULTIPLIER}, cap {DOMAIN_FLOOR_CAP}).")
         score = domain_floor
+    confirmed = [e.source for g in EXTERNAL_GROUPS for e in by_group.get(g, []) if e.ran and e.severity == SEVERITY_HIGH]
+    if confirmed and score < CONFIRMED_THREAT_FLOOR:
+        floor_notes.append(f"Score raised to {CONFIRMED_THREAT_FLOOR}: {', '.join(dict.fromkeys(confirmed))} explicitly list this URL as a threat.")
+        score = CONFIRMED_THREAT_FLOOR
     level = level_for_score(score)
 
     # Completeness / confidence

@@ -33,7 +33,7 @@ def test_contributions_are_capped_and_summed():
 
 def test_same_evidence_same_score():
     evidence = [_sb_match(), virustotal.parse_stats("https://x.test/", {"malicious": 2, "suspicious": 3, "harmless": 60, "undetected": 10})]
-    assert calculate_risk(evidence).score == calculate_risk(list(evidence)).score == 62
+    assert calculate_risk(evidence).score == calculate_risk(list(evidence)).score == 70
 
 
 def test_multiple_urls_same_source_take_max_not_sum():
@@ -97,3 +97,15 @@ def test_domain_indicators_lookalike_and_official():
     assert good.details["is_official_domain"] is True and good.details["indicators"] == []
     ip = get_domain_indicators("http://8.8.8.8/login")
     assert "ip_address_host" in {i["key"] for i in ip.details["indicators"]}
+
+
+def test_provider_listing_alone_is_high_risk():
+    risk = calculate_risk([_sb_match()])
+    assert risk.score == 70 and risk.level == "High"
+    assert any("explicitly list" in n for n in risk.notes)
+
+
+def test_no_match_does_not_trigger_confirmed_floor():
+    ev = safe_browsing.parse_response("https://x.test/", {})
+    risk = calculate_risk([ev])
+    assert risk.score == 0 and risk.level == "Low"
