@@ -1,0 +1,1 @@
+{"data": {"id": "u-fixture", "type": "url", "attributes": {"last_analysis_stats": {"malicious": 2, "suspicious": 3, "harmless": 60, "undetected": 10, "timeout": 0}, "reputation": -5, "last_analysis_date": 1700000000, "categories": {"Fixture": "phishing"}}}}

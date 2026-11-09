@@ -1,0 +1,133 @@
+"""Bilingual UI strings (English / Bangla)."""
+from __future__ import annotations
+
+STRINGS: dict[str, dict[str, str]] = {
+    "en": {
+        "tagline": "Don't Trust. Verify First.",
+        "hero": "Before You Trust, Let ScamSathi Investigate.",
+        "hero_sub": "Detect suspicious links and potentially fraudulent messages using AI-powered security investigation.",
+        "input_placeholder": "Paste a suspicious URL, SMS, email, or online offer here...",
+        "input_mode": "Input mode",
+        "mode_auto": "Auto Detect",
+        "mode_url": "URL Scan",
+        "mode_message": "Message Scan",
+        "investigate": "Investigate Now",
+        "consent": "I understand that the URL or relevant parts of this content may be sent to third-party security services (Google Safe Browsing, VirusTotal, URLhaus) and to the Gemini AI service for analysis. I will not submit confidential data.",
+        "consent_required": "Please confirm the privacy notice before investigating.",
+        "card_ai_title": "AI-powered investigation",
+        "card_ai_body": "A Gemini agent plans the investigation, chooses tools, and explains the evidence.",
+        "card_sources_title": "Multiple security sources",
+        "card_sources_body": "Google Safe Browsing, VirusTotal and URLhaus intelligence, normalized and scored deterministically.",
+        "card_lang_title": "Bangla and English",
+        "card_lang_body": "Plain-language explanations and safety steps in your language.",
+        "safety_title": "Safety reminders",
+        "safety_otp": "Never share your OTP with anyone.",
+        "safety_pin": "Never provide your banking PIN or password.",
+        "safety_verify": "Verify suspicious links before trusting them.",
+        "progress_title": "ScamSathi Investigation",
+        "agent_status": "Agent status",
+        "investigating": "Investigating...",
+        "overall": "Overall assessment",
+        "risk_score": "Risk score",
+        "risk_level": "Risk level",
+        "confidence": "Confidence",
+        "status": "Investigation status",
+        "summary": "Investigation summary",
+        "evidence": "Evidence",
+        "indicators": "Suspicious indicators",
+        "ai_explanation": "AI explanation",
+        "actions": "Recommended actions",
+        "timeline": "Investigation timeline",
+        "copy_report": "Copy report",
+        "download_report": "Download report",
+        "delete_record": "Delete this record",
+        "history": "History",
+        "no_history": "No investigations yet.",
+        "tab_overview": "Overview",
+        "tab_evidence": "Evidence",
+        "tab_ai": "AI Analysis",
+        "tab_investigation": "Investigation",
+        "disclaimer": "This is an automated risk assessment based on available evidence, not a definitive legal finding. 'No match' from a security service does not guarantee a website is safe.",
+        "degraded_notice": "Gemini API key not configured: the investigation is running with the deterministic rule-based planner and template explanations.",
+        "level_Low": "Low risk",
+        "level_Guarded": "Guarded",
+        "level_Suspicious": "Suspicious",
+        "level_High": "High risk",
+        "conf_High": "High",
+        "conf_Medium": "Medium",
+        "conf_Low": "Low",
+    },
+    "bn": {
+        "tagline": "বিশ্বাস নয়, আগে যাচাই।",
+        "hero": "বিশ্বাস করার আগে, স্ক্যামসাথীকে যাচাই করতে দিন।",
+        "hero_sub": "AI-চালিত নিরাপত্তা তদন্তের মাধ্যমে সন্দেহজনক লিংক ও প্রতারণামূলক বার্তা শনাক্ত করুন।",
+        "input_placeholder": "সন্দেহজনক URL, SMS, ইমেইল বা অনলাইন অফার এখানে পেস্ট করুন...",
+        "input_mode": "ইনপুট ধরন",
+        "mode_auto": "স্বয়ংক্রিয় শনাক্তকরণ",
+        "mode_url": "URL স্ক্যান",
+        "mode_message": "বার্তা স্ক্যান",
+        "investigate": "এখনই তদন্ত করুন",
+        "consent": "আমি বুঝেছি যে এই URL বা বার্তার প্রাসঙ্গিক অংশ তৃতীয় পক্ষের নিরাপত্তা সেবা (Google Safe Browsing, VirusTotal, URLhaus) এবং Gemini AI সেবায় পাঠানো হতে পারে। আমি গোপনীয় তথ্য জমা দেব না।",
+        "consent_required": "তদন্ত শুরুর আগে গোপনীয়তা নোটিশে সম্মতি দিন।",
+        "card_ai_title": "AI-চালিত তদন্ত",
+        "card_ai_body": "একটি Gemini এজেন্ট তদন্তের পরিকল্পনা করে, টুল বেছে নেয় এবং প্রমাণ ব্যাখ্যা করে।",
+        "card_sources_title": "একাধিক নিরাপত্তা উৎস",
+        "card_sources_body": "Google Safe Browsing, VirusTotal ও URLhaus তথ্য, নিয়মভিত্তিকভাবে স্কোর করা হয়।",
+        "card_lang_title": "বাংলা ও ইংরেজি",
+        "card_lang_body": "আপনার ভাষায় সহজ ব্যাখ্যা ও নিরাপত্তা পরামর্শ।",
+        "safety_title": "নিরাপত্তা অনুস্মারক",
+        "safety_otp": "কখনও কাউকে আপনার OTP দেবেন না।",
+        "safety_pin": "ব্যাংকিং PIN বা পাসওয়ার্ড কখনও শেয়ার করবেন না।",
+        "safety_verify": "বিশ্বাস করার আগে সন্দেহজনক লিংক যাচাই করুন।",
+        "progress_title": "স্ক্যামসাথী তদন্ত",
+        "agent_status": "এজেন্টের অবস্থা",
+        "investigating": "তদন্ত চলছে...",
+        "overall": "সামগ্রিক মূল্যায়ন",
+        "risk_score": "ঝুঁকি স্কোর",
+        "risk_level": "ঝুঁকির মাত্রা",
+        "confidence": "আস্থা",
+        "status": "তদন্তের অবস্থা",
+        "summary": "তদন্তের সারসংক্ষেপ",
+        "evidence": "প্রমাণ",
+        "indicators": "সন্দেহজনক লক্ষণ",
+        "ai_explanation": "AI ব্যাখ্যা",
+        "actions": "প্রস্তাবিত পদক্ষেপ",
+        "timeline": "তদন্তের সময়রেখা",
+        "copy_report": "রিপোর্ট কপি করুন",
+        "download_report": "রিপোর্ট ডাউনলোড",
+        "delete_record": "এই রেকর্ড মুছুন",
+        "history": "ইতিহাস",
+        "no_history": "এখনও কোনো তদন্ত নেই।",
+        "tab_overview": "সারসংক্ষেপ",
+        "tab_evidence": "প্রমাণ",
+        "tab_ai": "AI বিশ্লেষণ",
+        "tab_investigation": "তদন্ত",
+        "disclaimer": "এটি উপলব্ধ প্রমাণের ভিত্তিতে একটি স্বয়ংক্রিয় ঝুঁকি মূল্যায়ন, কোনো চূড়ান্ত আইনি সিদ্ধান্ত নয়। নিরাপত্তা সেবায় 'কোনো মিল নেই' মানে ওয়েবসাইটটি নিরাপদ — এমন নিশ্চয়তা নেই।",
+        "degraded_notice": "Gemini API কী সেট করা নেই: তদন্তটি নিয়মভিত্তিক পরিকল্পনাকারী ও টেমপ্লেট ব্যাখ্যা দিয়ে চলছে।",
+        "level_Low": "কম ঝুঁকি",
+        "level_Guarded": "সতর্ক",
+        "level_Suspicious": "সন্দেহজনক",
+        "level_High": "উচ্চ ঝুঁকি",
+        "conf_High": "উচ্চ",
+        "conf_Medium": "মাঝারি",
+        "conf_Low": "কম",
+    },
+}
+
+
+def t(key: str, lang: str = "en") -> str:
+    table = STRINGS.get(lang) or STRINGS["en"]
+    return table.get(key) or STRINGS["en"].get(key, key)
+
+
+def language_name(code: str) -> str:
+    return "Bangla" if code == "bn" else "English"
+
+
+def detect_language(text: str) -> str:
+    """Return 'bn' if the text is predominantly Bangla script, else 'en'."""
+    bangla = sum(1 for ch in text if "\u0980" <= ch <= "\u09FF")
+    letters = sum(1 for ch in text if ch.isalpha())
+    if letters and bangla / letters > 0.3:
+        return "bn"
+    return "en"

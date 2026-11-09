@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+scamsathi.db
+*.db
+.pytest_cache/
+venv/
+.venv/
+.streamlit/secrets.toml

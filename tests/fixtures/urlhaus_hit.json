@@ -1,0 +1,1 @@
+{"query_status": "ok", "id": "fixture", "url": "http://example-malware.test/payload.exe", "url_status": "online", "threat": "malware_download", "tags": ["exe", "fixture"], "date_added": "2024-01-01 00:00:00 UTC", "urlhaus_reference": "https://urlhaus.abuse.ch/url/fixture/", "blacklists": {"spamhaus_dbl": "not listed", "surbl": "not listed"}}

@@ -1,0 +1,1 @@
+{"data": {"id": "analysis-fixture", "type": "analysis", "attributes": {"status": "completed", "stats": {"malicious": 6, "suspicious": 0, "harmless": 55, "undetected": 12, "timeout": 0}}}}
