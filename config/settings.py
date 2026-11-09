@@ -23,7 +23,8 @@ def _is_placeholder(value: str) -> bool:
 @dataclass(frozen=True)
 class Settings:
     gemini_api_key: str = field(default_factory=lambda: _env("GEMINI_API_KEY"))
-    gemini_model: str = field(default_factory=lambda: _env("GEMINI_MODEL", "gemini-2.0-flash"))
+    gemini_model: str = field(default_factory=lambda: _env("GEMINI_MODEL", "gemini-3.6-flash"))
+    gemini_fallback_models: str = field(default_factory=lambda: _env("GEMINI_FALLBACK_MODELS", "gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3-flash-preview"))
     virustotal_api_key: str = field(default_factory=lambda: _env("VIRUSTOTAL_API_KEY"))
     safe_browsing_key: str = field(default_factory=lambda: _env("GOOGLE_SAFE_BROWSING_KEY"))
     urlhaus_auth_key: str = field(default_factory=lambda: _env("URLHAUS_AUTH_KEY"))
@@ -34,6 +35,16 @@ class Settings:
     http_timeout_seconds: float = 10.0
     virustotal_poll_timeout_seconds: float = 20.0
     virustotal_poll_interval_seconds: float = 3.0
+
+    @property
+    def gemini_model_candidates(self) -> list[str]:
+        """Primary model first, then fallbacks tried only on 404/429/5xx responses."""
+        seen: list[str] = []
+        for name in [self.gemini_model, *self.gemini_fallback_models.split(",")]:
+            name = name.strip()
+            if name and name not in seen:
+                seen.append(name)
+        return seen
 
     @property
     def gemini_configured(self) -> bool:

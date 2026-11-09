@@ -142,7 +142,8 @@ cp .env.example .env            # then fill in your keys
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | recommended | Agent planning, AI message classification, report writing |
-| `GEMINI_MODEL` | no | Defaults to `gemini-2.0-flash` |
+| `GEMINI_MODEL` | no | Defaults to `gemini-3.6-flash` |
+| `GEMINI_FALLBACK_MODELS` | no | Comma-separated models tried only when the primary returns 404/429/5xx (model names are retired often) |
 | `GOOGLE_SAFE_BROWSING_KEY` | recommended | Safe Browsing lookups |
 | `VIRUSTOTAL_API_KEY` | recommended | VirusTotal lookups |
 | `URLHAUS_AUTH_KEY` | optional | URLhaus lookups |

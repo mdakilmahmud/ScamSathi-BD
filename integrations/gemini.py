@@ -9,6 +9,7 @@ and executes every tool call itself.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
@@ -48,6 +49,20 @@ class ModelClient(Protocol):
     def tool_result_message(self, name: str, result: dict) -> Any: ...
 
 
+GEMINI_TIMEOUT_MS = 45_000
+# Model names are retired frequently and busy models return 503/504; these are the
+# only error codes for which we move on to the next configured model.
+RETRY_NEXT_MODEL_CODES = {404, 429, 500, 503, 504}
+
+
+def _error_code(exc: Exception) -> int | None:
+    code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+    if isinstance(code, int):
+        return code
+    match = re.match(r"\s*(\d{3})\b", str(exc))
+    return int(match.group(1)) if match else None
+
+
 class GeminiClient:
     name = "gemini"
 
@@ -55,8 +70,28 @@ class GeminiClient:
         from google import genai  # imported lazily so tests never need the SDK configured
 
         self._types = genai.types
-        self._client = genai.Client(api_key=api_key or settings.gemini_api_key)
+        self._client = genai.Client(
+            api_key=api_key or settings.gemini_api_key,
+            http_options=genai.types.HttpOptions(timeout=GEMINI_TIMEOUT_MS),
+        )
         self.model = model or settings.gemini_model
+        self._candidates = [model] if model else settings.gemini_model_candidates
+        self.model_used: str | None = None
+
+    def _generate(self, contents: Any, config: Any):
+        """Call generate_content, falling back to the next model only on availability errors."""
+        errors: list[str] = []
+        for candidate in self._candidates:
+            try:
+                response = self._client.models.generate_content(model=candidate, contents=contents, config=config)
+                self.model_used = candidate
+                self._candidates = [candidate, *[c for c in self._candidates if c != candidate]]
+                return response
+            except Exception as exc:
+                errors.append(f"{candidate}: {exc.__class__.__name__}: {str(exc)[:160]}")
+                if _error_code(exc) not in RETRY_NEXT_MODEL_CODES:
+                    break
+        raise GeminiError("Gemini request failed: " + " | ".join(errors))
 
     def user_message(self, text: str):
         return self._types.Content(role="user", parts=[self._types.Part.from_text(text=text)])
@@ -74,10 +109,7 @@ class GeminiClient:
             automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             temperature=0.2,
         )
-        try:
-            response = self._client.models.generate_content(model=self.model, contents=history, config=config)
-        except Exception as exc:
-            raise GeminiError(f"Gemini request failed: {exc.__class__.__name__}: {exc}") from exc
+        response = self._generate(history, config)
 
         candidates = response.candidates or []
         if not candidates or candidates[0].content is None:
@@ -100,10 +132,7 @@ class GeminiClient:
             response_schema=schema,
             temperature=0.3,
         )
-        try:
-            response = self._client.models.generate_content(model=self.model, contents=prompt, config=config)
-        except Exception as exc:
-            raise GeminiError(f"Gemini request failed: {exc.__class__.__name__}: {exc}") from exc
+        response = self._generate(prompt, config)
         parsed = getattr(response, "parsed", None)
         if isinstance(parsed, schema):
             return parsed
@@ -123,8 +152,8 @@ def ping() -> tuple[bool, str]:
     try:
         from google import genai
 
-        client = genai.Client(api_key=settings.gemini_api_key)
-        response = client.models.generate_content(model=settings.gemini_model, contents="Reply with the single word OK.")
-        return True, (response.text or "").strip()[:50]
+        client = GeminiClient()
+        response = client._generate("Reply with the single word OK.", None)
+        return True, f"{client.model_used}: {(response.text or '').strip()[:40]}"
     except Exception as exc:
         return False, f"{exc.__class__.__name__}: {exc}"[:200]
