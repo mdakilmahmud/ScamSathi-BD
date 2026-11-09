@@ -28,20 +28,20 @@ def render() -> None:
                 return f"color:{color}; font-weight:700"
         return ""
 
-    st.dataframe(df.style.map(_color, subset=["Risk"]), use_container_width=True, hide_index=True)
+    st.dataframe(df.style.map(_color, subset=["Risk"]), width="stretch", hide_index=True)
 
     st.markdown("#### Open a saved report")
     options = {f"#{r['investigation_id']} · {format_dt(r['created_at'])} · {r['target'][:40]} · {r['risk_level']}": r["investigation_id"] for r in rows}
     choice = st.selectbox("Investigation", list(options), label_visibility="collapsed")
     c1, c2, c3 = st.columns([1, 1, 2])
     with c1:
-        if st.button("Open report", type="primary", use_container_width=True):
+        if st.button("Open report", type="primary", width="stretch"):
             st.session_state["selected_investigation_id"] = options[choice]
             st.session_state.pop("last_result", None)
             st.query_params["id"] = str(options[choice])
             st.switch_page("frontend/results_page.py")
     with c2:
-        if st.button("Delete", use_container_width=True):
+        if st.button("Delete", width="stretch"):
             repository.delete_investigation(options[choice])
             st.rerun()
     with c3:

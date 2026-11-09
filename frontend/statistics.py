@@ -28,16 +28,16 @@ def render() -> None:
     a, b = st.columns(2)
     with a:
         ordered = {k: stats["by_level"].get(k, 0) for k in ("Low", "Guarded", "Suspicious", "High")}
-        st.plotly_chart(_bar(ordered, LEVEL_COLORS, "Risk levels"), use_container_width=True, config={"displayModeBar": False})
+        st.plotly_chart(_bar(ordered, LEVEL_COLORS, "Risk levels"), width="stretch", config={"displayModeBar": False})
     with b:
-        st.plotly_chart(_bar(stats["by_type"], title="Input types"), use_container_width=True, config={"displayModeBar": False})
+        st.plotly_chart(_bar(stats["by_type"], title="Input types"), width="stretch", config={"displayModeBar": False})
     a, b = st.columns(2)
     with a:
-        st.plotly_chart(_bar(stats["by_status"], {"Complete": "#22C55E", "Partial": "#F59E0B", "Failed": "#EF4444"}, "Investigation completeness"), use_container_width=True, config={"displayModeBar": False})
+        st.plotly_chart(_bar(stats["by_status"], {"Complete": "#22C55E", "Partial": "#F59E0B", "Failed": "#EF4444"}, "Investigation completeness"), width="stretch", config={"displayModeBar": False})
     with b:
         st.markdown("**Source availability** (evidence rows by status)")
         import pandas as pd
 
         df = pd.DataFrame(stats["source_status"], columns=["Source", "Status", "Count"])
-        st.dataframe(df.pivot_table(index="Source", columns="Status", values="Count", fill_value=0), use_container_width=True)
+        st.dataframe(df.pivot_table(index="Source", columns="Status", values="Count", fill_value=0), width="stretch")
     st.caption("Statistics describe this installation's saved history only, not real-world scam prevalence.")

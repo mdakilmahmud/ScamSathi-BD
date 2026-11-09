@@ -42,7 +42,7 @@ def render() -> None:
         consent = st.checkbox(t("consent", lang), value=st.session_state.get("consent", False), key="consent")
         with col_btn:
             st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
-            go = st.button(t("investigate", lang), type="primary", use_container_width=True)
+            go = st.button(t("investigate", lang), type="primary", width="stretch")
 
     if go:
         if not content.strip():

@@ -48,7 +48,7 @@ def render() -> None:
 
     g, m = st.columns([1, 2])
     with g:
-        st.plotly_chart(risk_gauge(risk["score"], risk["level"]), use_container_width=True, config={"displayModeBar": False})
+        st.plotly_chart(risk_gauge(risk["score"], risk["level"]), width="stretch", config={"displayModeBar": False})
     with m:
         st.markdown(f"#### {t('overall', lang)}")
         st.markdown(level_badge(risk["level"], lang), unsafe_allow_html=True)
@@ -72,7 +72,7 @@ def render() -> None:
         for n, action in enumerate(report.get("recommended_actions", []), 1):
             st.markdown(f"{n}. {action}")
         st.markdown("#### Score breakdown")
-        st.plotly_chart(contribution_chart(risk.get("contributions", [])), use_container_width=True, config={"displayModeBar": False})
+        st.plotly_chart(contribution_chart(risk.get("contributions", [])), width="stretch", config={"displayModeBar": False})
         for c in risk.get("contributions", []):
             st.caption(f"{c['group']}: {c['points']}/{c['maximum']} — {c['basis']}")
         for note in risk.get("notes", []):
@@ -109,14 +109,14 @@ def render() -> None:
     md = build_markdown_report(result, lang)
     a1, a2, a3, a4 = st.columns([1, 1, 1, 1])
     with a1:
-        st.download_button(t("download_report", lang) + " (.md)", md, file_name=f"scamsathi_report_{result.get('investigation_id') or 'latest'}.md", mime="text/markdown", use_container_width=True)
+        st.download_button(t("download_report", lang) + " (.md)", md, file_name=f"scamsathi_report_{result.get('investigation_id') or 'latest'}.md", mime="text/markdown", width="stretch")
     with a2:
-        st.download_button("JSON", result_json(result), file_name=f"scamsathi_report_{result.get('investigation_id') or 'latest'}.json", mime="application/json", use_container_width=True)
+        st.download_button("JSON", result_json(result), file_name=f"scamsathi_report_{result.get('investigation_id') or 'latest'}.json", mime="application/json", width="stretch")
     with a3:
-        if st.button(t("copy_report", lang), use_container_width=True):
+        if st.button(t("copy_report", lang), width="stretch"):
             st.session_state["show_copy"] = not st.session_state.get("show_copy", False)
     with a4:
-        if result.get("investigation_id") and st.button(t("delete_record", lang), type="secondary", use_container_width=True):
+        if result.get("investigation_id") and st.button(t("delete_record", lang), type="secondary", width="stretch"):
             repository.delete_investigation(int(result["investigation_id"]))
             st.session_state.pop("last_result", None)
             st.session_state.pop("selected_investigation_id", None)
