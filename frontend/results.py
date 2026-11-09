@@ -40,7 +40,7 @@ def render() -> None:
     st.markdown(
         f'<span class="ss-pill">{result["input_type"]}</span><span class="ss-pill">{format_dt(result.get("created_at", ""))}</span>'
         f'<span class="ss-pill">Planner: {result.get("planner", "")}{" · " + result["model"] if result.get("model") else ""}</span><span class="ss-pill">Report: {report.get("generator", "")}</span>'
-        f'<span class="ss-pill">{result.get("tool_calls", 0)} tool calls · {result.get("duration_ms", 0)} ms</span>',
+        + (f'<span class="ss-pill">{result.get("tool_calls", 0)} tool calls · {result.get("duration_ms", 0)} ms</span>' if result.get("duration_ms") else ""),
         unsafe_allow_html=True,
     )
     completed = len(risk.get("sources_completed", []))
