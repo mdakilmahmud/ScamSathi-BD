@@ -172,7 +172,7 @@ def test_prompt_injection_does_not_change_tools_or_score(configured):
     assert result["tool_calls"] == 1
     assert "prompt_injection" in [i["key"] for i in result["evidence"][0]["details"]["indicators"]]
     # the deterministic engine, not the text, set the score
-    assert result["risk"]["score"] == 9
+    assert result["risk"]["score"] == 10
 
 
 def test_degraded_mode_without_gemini(monkeypatch, temp_db):

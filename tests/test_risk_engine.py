@@ -67,7 +67,7 @@ def test_message_only_floor_scales_strong_indicators():
     keys = {i["key"] for i in analysis.indicators}
     assert {"otp_request", "prize_claim", "urgency", "impersonation"} <= keys
     risk = calculate_risk([analysis_to_evidence(analysis)], has_url=False, llm_available=False)
-    assert risk.score == 72 and risk.level == "High" and risk.confidence == "Medium"
+    assert risk.score == 80 and risk.level == "High" and risk.confidence == "Medium"
     assert any("floor" in n for n in risk.notes)
 
 

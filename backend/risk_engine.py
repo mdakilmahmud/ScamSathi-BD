@@ -21,7 +21,7 @@ from config.constants import (
 )
 
 EXTERNAL_SOURCES = ("safe_browsing", "virustotal", "urlhaus")
-MESSAGE_FLOOR_MULTIPLIER = 9
+MESSAGE_FLOOR_MULTIPLIER = 10
 MESSAGE_FLOOR_CAP = 80
 DOMAIN_FLOOR_MULTIPLIER = 4
 DOMAIN_FLOOR_CAP = 45

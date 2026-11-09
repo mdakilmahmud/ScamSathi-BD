@@ -109,7 +109,7 @@ If `GEMINI_API_KEY` is missing or Gemini fails mid-run, a deterministic rule-bas
 
 Score bands: 0–19 Low · 20–39 Guarded · 40–69 Suspicious · 70–100 High.
 
-Documented floors: strong message indicators (indicator weight × 9, cap 80) and brand-lookalike domain features (weight × 4, cap 45) can raise the score, because an OTP request or a fake-bKash domain is dangerous regardless of list reputation. Only API evidence can push a score above those caps. Conversely, a URL that Safe Browsing, VirusTotal or URLhaus explicitly lists as phishing/malware is a confirmed threat and is floored at 70 (High) even if nothing else corroborates it. Multiple URLs checked by the same source contribute the maximum, not the sum. An unavailable API contributes no evidence for or against safety and lowers **confidence**, which is reported separately from risk.
+Documented floors: strong message indicators (indicator weight × 10, cap 80) and brand-lookalike domain features (weight × 4, cap 45) can raise the score, because an OTP request or a fake-bKash domain is dangerous regardless of list reputation. Only API evidence can push a score above those caps. Conversely, a URL that Safe Browsing, VirusTotal or URLhaus explicitly lists as phishing/malware is a confirmed threat and is floored at 70 (High) even if nothing else corroborates it. Multiple URLs checked by the same source contribute the maximum, not the sum. An unavailable API contributes no evidence for or against safety and lowers **confidence**, which is reported separately from risk.
 
 ## 7. API Integrations
 
