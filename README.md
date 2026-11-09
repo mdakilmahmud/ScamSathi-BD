@@ -146,7 +146,7 @@ cp .env.example .env            # then fill in your keys
 | `GEMINI_FALLBACK_MODELS` | no | Comma-separated models tried only when the primary returns 404/429/5xx (model names are retired often) |
 | `GEMINI_THINKING_LEVEL` | no | `low` (default, fast), `high`, or `default` to let the model decide; ignored by models that reject it |
 | `GOOGLE_SAFE_BROWSING_KEY` | recommended | Safe Browsing lookups |
-| `VIRUSTOTAL_API_KEY` | recommended | VirusTotal lookups |
+| `VIRUSTOTAL_API_KEY` | optional | VirusTotal second-opinion lookups (~90 AV engines); without it the source is shown as "Not configured" and confidence is slightly lower |
 | `URLHAUS_AUTH_KEY` | optional | URLhaus lookups |
 | `DATABASE_URL` | no | Defaults to `sqlite:///scamsathi.db` |
 | `RETAIN_SUBMITTED_CONTENT` | no | Store a minimised copy of submissions in history (default `true`) |

@@ -78,7 +78,7 @@ def settings_page() -> None:
     rows = [
         {"Service": "Gemini (agent + report)", "Configured": settings.gemini_configured, "Env var": "GEMINI_API_KEY"},
         {"Service": "Google Safe Browsing", "Configured": settings.safe_browsing_configured, "Env var": "GOOGLE_SAFE_BROWSING_KEY"},
-        {"Service": "VirusTotal", "Configured": settings.virustotal_configured, "Env var": "VIRUSTOTAL_API_KEY"},
+        {"Service": "VirusTotal (optional)", "Configured": settings.virustotal_configured, "Env var": "VIRUSTOTAL_API_KEY"},
         {"Service": "URLhaus (optional)", "Configured": settings.urlhaus_configured, "Env var": "URLHAUS_AUTH_KEY"},
     ]
     st.table([{**r, "Configured": "✅ yes" if r["Configured"] else "⚫ no"} for r in rows])
