@@ -198,3 +198,21 @@ _Add your team here._
 ---
 
 Automated risk assessment, not a definitive legal finding. Data submitted for investigation may be sent to Google Safe Browsing, VirusTotal, URLhaus and the Gemini API; do not submit confidential content.
+
+## Deploying online
+
+**Streamlit Community Cloud (free, easiest):** sign in at https://share.streamlit.io with GitHub → *New app* → repo `mdakilmahmud/ScamSathi-BD`, branch `main`, file `app.py` → *Advanced settings → Secrets* and paste:
+
+```toml
+GEMINI_API_KEY = "..."
+GOOGLE_SAFE_BROWSING_KEY = "..."
+```
+
+**Docker (Hugging Face Spaces, Render, Railway, Fly.io, any VPS):**
+
+```bash
+docker build -t scamsathi .
+docker run -p 8501:8501 -e GEMINI_API_KEY=... -e GOOGLE_SAFE_BROWSING_KEY=... -v scamsathi-data:/data scamsathi
+```
+
+The container reads `PORT` (default 8501) and stores the SQLite DB in `/data`.
