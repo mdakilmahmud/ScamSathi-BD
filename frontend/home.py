@@ -26,9 +26,15 @@ def render() -> None:
         st.info(t("degraded_notice", lang), icon="ℹ️")
 
     with st.container(border=True):
-        example = st.selectbox("Try an example (optional)", ["—"] + list(EXAMPLES), key="example_pick")
-        default_text = EXAMPLES.get(example, "") if example != "—" else st.session_state.get("draft_content", "")
-        content = st.text_area("Content", value=default_text, placeholder=t("input_placeholder", lang), height=150, label_visibility="collapsed", key="content_input")
+        st.session_state.setdefault("content_input", st.session_state.get("draft_content", ""))
+
+        def _apply_example() -> None:
+            picked = st.session_state.get("example_pick", "—")
+            if picked != "—":
+                st.session_state["content_input"] = EXAMPLES[picked]
+
+        st.selectbox("Try an example (optional)", ["—"] + list(EXAMPLES), key="example_pick", on_change=_apply_example)
+        content = st.text_area("Content", placeholder=t("input_placeholder", lang), height=150, label_visibility="collapsed", key="content_input")
         col_mode, col_btn = st.columns([3, 1])
         with col_mode:
             mode_labels = {"auto": t("mode_auto", lang), "url": t("mode_url", lang), "message": t("mode_message", lang)}
