@@ -77,6 +77,7 @@ class GeminiClient:
         self.model = model or settings.gemini_model
         self._candidates = [model] if model else settings.gemini_model_candidates
         self.model_used: str | None = None
+        self.model_switches: list[str] = []
 
     def _thinking_config(self):
         level = (settings.gemini_thinking_level or "").strip().lower()
@@ -98,6 +99,8 @@ class GeminiClient:
             try:
                 response = self._client.models.generate_content(model=candidate, contents=contents, config=config)
                 self.model_used = candidate
+                if errors:
+                    self.model_switches.append(f"Switched to {candidate} after: " + " | ".join(errors))
                 self._candidates = [candidate, *[c for c in self._candidates if c != candidate]]
                 return response
             except Exception as exc:

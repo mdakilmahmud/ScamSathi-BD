@@ -191,6 +191,7 @@ class InvestigationAgent:
         history: list[Any] = [self.model.user_message(self._initial_message())]
         interpretation = ""
         fell_back = False
+        switches_seen: list[str] = []
         planner = self.model.name
         self._log("Investigation planning", None, "info", f"Planner: {planner}; {len(tools)} tools declared; budget {self.max_tool_calls} calls.")
 
@@ -207,6 +208,9 @@ class InvestigationAgent:
                 history = [fallback.user_message(self._initial_message())]
                 continue
 
+            for note in getattr(self.model, "model_switches", [])[len(switches_seen):]:
+                switches_seen.append(note)
+                self._log("Model fallback", None, "info", note[:300])
             if model_turn.raw_content is not None:
                 history.append(model_turn.raw_content)
             if not model_turn.function_calls:
