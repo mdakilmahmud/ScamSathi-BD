@@ -26,6 +26,7 @@ CSS = """
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Rajdhani:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;600&display=swap');
 :root { --bg:#030806; --panel:#07110D; --panel2:#0A1A13; --line:#0F3B2A; --neon:#00FF9C; --cyan:#00E5FF; --amber:#FFB020; --red:#FF3864; --text:#D7FFE9; --muted:#6FA28A; }
 html, body, .stApp, [data-testid="stAppViewContainer"] * { font-family:'JetBrains Mono', ui-monospace, Menlo, 'Noto Sans Bengali', monospace; }
+[data-testid="stIconMaterial"], [class*="material-symbols"], [data-testid="stAppViewContainer"] [data-testid="stIconMaterial"], [data-testid="stAppViewContainer"] [class*="material-symbols"] { font-family:'Material Symbols Rounded' !important; }
 h1,h2,h3,h4, .hx-title { font-family:'Rajdhani','Noto Sans Bengali','JetBrains Mono',sans-serif !important; letter-spacing:.06em; text-transform:uppercase; }
 .stApp {
   background-color: var(--bg);
