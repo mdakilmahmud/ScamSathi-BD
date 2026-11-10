@@ -11,8 +11,19 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
 
+def _secret(name: str) -> str:
+    """Read from Streamlit secrets (e.g. Community Cloud) when no env var is set."""
+    try:
+        import streamlit as st
+
+        value = st.secrets.get(name)
+    except Exception:
+        return ""
+    return str(value) if value is not None else ""
+
+
 def _env(name: str, default: str = "") -> str:
-    value = os.getenv(name, default)
+    value = os.getenv(name) or _secret(name) or default
     return value.strip() if value else default
 
 
