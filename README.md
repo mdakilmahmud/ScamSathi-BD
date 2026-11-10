@@ -208,6 +208,8 @@ GEMINI_API_KEY = "..."
 GOOGLE_SAFE_BROWSING_KEY = "..."
 ```
 
+Secrets are read once at startup: if you add or change them after deploying, use *⋮ → Reboot app* so they take effect.
+
 **Docker (Hugging Face Spaces, Render, Railway, Fly.io, any VPS):**
 
 ```bash
